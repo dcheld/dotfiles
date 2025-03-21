@@ -10,6 +10,14 @@
     type = "git-repo"
     url = "git@github.com:dcheld/zfiles.git"
 
+{{ if not (lookPath "vim") -}}
 [".vim/"]
     type = "git-repo"
     url = "git@github.com:dcheld/vimfiles.git"
+{{- end }}
+
+{{ if not (lookPath "qtile") -}}
+[".config/qtile/"]
+    type = "git-repo"
+    url = "git@github.com:dcheld/qtile.git"
+{{- end }}
