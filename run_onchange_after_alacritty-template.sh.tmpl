@@ -1,0 +1,20 @@
+{{ if (lookPath "alacritty") -}}
+#!/usr/bin/env bash
+
+theme="{{- .alacritty.theme -}}"
+url="https://raw.githubusercontent.com/alacritty/alacritty-theme/refs/heads/master/themes/$theme.toml"
+theme_file="$HOME/.config/alacritty/theme.toml"
+
+temp_file=$(mktemp)
+response=$(curl -s -o "$temp_file" -w "%{http_code}" "$url")
+
+if [[ "$response" -eq 200 ]]; then
+    echo "Tema $theme baixado com sucesso."
+    mv "$temp_file" "$theme_file" 
+else
+    # Remover o arquivo se o download falhar ou estiver vazio
+    echo "Falha ao baixar o tema $theme."
+    rm -f "$theme_file"
+fi
+
+{{- end }}

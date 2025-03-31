@@ -1,13 +1,10 @@
 {{- if (lookPath "alacritty") }}
 [general]
-
-{{- if .alacritty.theme }}
 import = [
-    "~/.config/alacritty/themes/themes/{{- .alacritty.theme -}}.toml"
+    "~/.config/alacritty/theme.toml"
 ]
-{{ end -}}
 
-{{- if and (eq .tmux.enable true) (lookPath "tmux") }}
+{{ if and (eq .tmux.enable true) (lookPath "tmux") -}}
 [terminal.shell]
 program = "/usr/bin/env"
 args = ["tmux", "new-session", "-A", "-s", "main"]
