@@ -1,14 +1,17 @@
 {{- $email := promptStringOnce . "email" "E-mail address" -}}
 {{- $fontSize := promptIntOnce . "fontSize" "Font size" 10 -}}
 {{- $fontFamily := promptStringOnce . "fontFamily" "Font famaly" "MesloLGM Nerd Font" -}}
-{{- $applyFontFamilyAlacritty := promptBoolOnce . "applyFontFamilyAlacritty" "Should it use Alacritty Nerd Fonts" -}}
 
 [data]
     # General
     email = {{ $email | quote }}
     fontSize = {{ $fontSize }}
     fontFamily = {{ $fontFamily| quote }}
-    applyFontFamilyAlacritty = {{ $applyFontFamilyAlacritty }}
+
+    # alacritty
+    [data.alacritty]
+    {{ $alacrittyTheme := promptStringOnce . "alacritty.theme" "Alacritty Theme" -}}
+    theme = {{ $alacrittyTheme | quote }}
 
     # gitconfig
     {{ $gitSource := promptStringOnce . "git.source" "Git default repo path" "~/source/repos/gitconfig" -}}
