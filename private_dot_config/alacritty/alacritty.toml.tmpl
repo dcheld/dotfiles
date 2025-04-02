@@ -1,7 +1,7 @@
 {{- if (lookPath "alacritty") }}
 [general]
 import = [
-    "~/.config/alacritty/theme.toml"
+    "theme.toml"
 ]
 
 {{ if and (eq .tmux.enable true) (lookPath "tmux") -}}
