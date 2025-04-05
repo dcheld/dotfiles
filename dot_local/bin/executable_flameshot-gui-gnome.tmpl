@@ -1,0 +1,8 @@
+{{ $desktop := (env "GNOME_SHELL_SESSION_MODE") -}}
+{{ $session := (env "XDG_SESSION_TYPE") -}}
+{{ if and
+    ($desktop)
+    (lookPath "flameshot")
+    (contains (lower $session) "wayland") -}}
+QT_QPA_PLATFORM=wayland flameshot gui
+{{ end -}}
