@@ -16,6 +16,10 @@
         sudo pacman -R --noconfirm vim || true
     fi
 
+    {{- if .processor }}
+    yay -S --noconfirm --needed {{ .processor }}-ucode
+    {{- end }}
+
     yay -S --noconfirm --needed \
         zsh doas \
         polkit lxsession-gtk3 \
@@ -25,7 +29,8 @@
         nemo nemo-seahorse clipcat volctl blueman xfce4-power-manager \
         rofi dmenu \
         podman podman-docker \
-        gvim ttf-meslo-nerd noto-fonts-emoji tmux \
+        ttf-meslo-nerd noto-fonts-emoji noto-fonts-cjk\
+        gvim tmux \
         alsa-utils pavucontrol playerctl \
         j4-dmenu-desktop \
         extra/dconf extra/dconf-editor \
