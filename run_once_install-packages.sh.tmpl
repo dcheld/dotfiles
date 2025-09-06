@@ -9,6 +9,7 @@
         git clone https://aur.archlinux.org/yay.git /tmp/yay
         pushd /tmp/yay
         makepkg -si
+        yay -Y --gendb
         popd
     fi
 
@@ -21,7 +22,7 @@
     {{- end }}
 
     yay -S --noconfirm --needed \
-        zsh doas \
+        zsh doas ufw\
         polkit lxsession-gtk3 dialog \
         rxvt-unicode xsensors extra/xorg-xkill \
         xss-lock xscreensaver redshift \
@@ -40,6 +41,7 @@
      systemctl --user enable --now ssh-agent
      systemctl --user enable --now gnome-keyring-daemon
      systemctl --user enable --now gcr-ssh-agent.socket
+     sudo systemctl enable --now ufw
 
 
 {{- else if eq .chezmoi.osRelease.id "ubuntu" }}
