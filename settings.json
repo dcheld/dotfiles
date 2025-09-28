@@ -77,5 +77,10 @@
   "files.autoSave": "afterDelay",
   "workbench.editor.splitInGroupLayout": "vertical",
   "workbench.colorTheme": "Tokyo Night",
-  "diffEditor.renderSideBySide": true
+  "diffEditor.renderSideBySide": true,
+  "docker.extension.enableComposeLanguageServer": false,
+  "explorer.confirmDelete": false,
+  "workbench.secondarySideBar.defaultVisibility": "hidden",
+  "editor.minimap.showSlider": "always",
+  "git.confirmSync": false
 }
