@@ -2,26 +2,27 @@
 sudo_command = "sudo"
 disable = ["asdf", "containers"]
 no_retry = true
+no_self_update = true
 
 [post_commands]
 
 {{- if (lookPath "flatpak") }}
 "Flatpak Remove Unused" = "flatpak remove --unused"
-{{ end -}}
+{{- end }}
 
 {{- if (lookPath "apt") }}
 "Apt autoclean/autoremove" = "sudo apt autoclean -y && sudo apt autoremove -y"
-{{ end -}}
+{{- end }}
 
 {{- if (lookPath "snap") }}
 "Snap Clean" = "snap-clean"
-{{ end -}}
+{{- end }}
 
 {{- if (lookPath "paccache") }}
 "Pacman remove old Versions"="paccache -vrk 2"
-{{ end -}}
+{{- end }}
 
-{{ if (lookPath "pacman") }}
+{{- if (lookPath "pacman") }}
 "Remove pacotes órfãos" = "~/.local/bin/pacman-clean-orphans"
 {{- end }}
 
