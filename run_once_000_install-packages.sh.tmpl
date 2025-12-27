@@ -36,13 +36,13 @@
         j4-dmenu-desktop \
         extra/dconf extra/dconf-editor \
         python-psutil \
-        khal
+        khal \
+        dunst libnotify
 
      systemctl --user enable --now ssh-agent
-     systemctl --user enable --now gnome-keyring-daemon
+     [[ -z "$SSH_AUTH_SOCK" ]] && systemctl --user enable --now gnome-keyring-daemon
      systemctl --user enable --now gcr-ssh-agent.socket
      sudo systemctl enable --now ufw
-
 
 {{- else if eq .chezmoi.osRelease.id "ubuntu" }}
 

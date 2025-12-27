@@ -1,0 +1,9 @@
+[global]
+font = Monospace 12
+offset = 12x40
+corner_radius = 6
+frame_width = 2
+timeout = 7
+
+[urgency_critical]
+timeout = 0
