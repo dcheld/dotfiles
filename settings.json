@@ -82,5 +82,6 @@
   "explorer.confirmDelete": false,
   "workbench.secondarySideBar.defaultVisibility": "hidden",
   "editor.minimap.showSlider": "always",
-  "git.confirmSync": false
+  "git.confirmSync": false,
+  "chat.viewSessions.orientation": "stacked"
 }
