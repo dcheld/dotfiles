@@ -23,7 +23,7 @@
 
     yay -S --noconfirm --needed \
         zsh doas ufw\
-        polkit lxsession-gtk3 dialog \
+        polkit dialog \
         rxvt-unicode xsensors extra/xorg-xkill \
         xss-lock xscreensaver redshift \
         gnome-keyring seahorse \
@@ -37,7 +37,8 @@
         extra/dconf extra/dconf-editor \
         python-psutil \
         khal \
-        dunst libnotify
+        dunst libnotify \
+        xclip wl-clipboard
 
      systemctl --user enable --now ssh-agent
      [[ -z "$SSH_AUTH_SOCK" ]] && systemctl --user enable --now gnome-keyring-daemon
