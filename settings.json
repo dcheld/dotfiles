@@ -83,5 +83,6 @@
   "workbench.secondarySideBar.defaultVisibility": "hidden",
   "editor.minimap.showSlider": "always",
   "git.confirmSync": false,
-  "chat.viewSessions.orientation": "stacked"
+  "chat.viewSessions.orientation": "stacked",
+  "workbench.editor.empty.hint": "hidden"
 }
