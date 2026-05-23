@@ -15,9 +15,9 @@ KEY_NAME="{{ .gpg.keyName }}"
 BW_SECRET_ID="{{ .bw.gpgItemid }}"
 
 # Arquivos temporários
-PRIVATE_KEY_FILE="/tmp/${KEY_NAME}-private-key.asc"
-PUBLIC_KEY_FILE="/tmp/${KEY_NAME}-public-key.asc"
-REVOCATION_FILE="/tmp/${KEY_NAME}-revocation-cert.asc"
+PRIVATE_KEY_PATH="/tmp/${KEY_NAME}-private-key.asc"
+PUBLIC_KEY_PATH="/tmp/${KEY_NAME}-public-key.asc"
+REVOCATION_FILE_PATH="/tmp/${KEY_NAME}-revocation-cert.asc"
 
 # Definir trap para sempre executar cleanup ao sair do script
 trap cleanup EXIT
@@ -51,13 +51,13 @@ check_dependencies() {
 # Função para exportar chaves
 export_gpg_keys() {
     echo "🔑 Exportando chave privada..."
-    gpg --export-secret-keys --armor "$GPG_KEY_ID" > "$PRIVATE_KEY_FILE"
+    gpg --export-secret-keys --armor "$GPG_KEY_ID" > "$PRIVATE_KEY_PATH"
 
     echo "🔓 Exportando chave pública..."
-    gpg --export --armor "$GPG_KEY_ID" > "$PUBLIC_KEY_FILE"
+    gpg --export --armor "$GPG_KEY_ID" > "$PUBLIC_KEY_PATH"
 
     echo "❌ Criando certificado de revogação..."
-    gpg --gen-revoke "$GPG_KEY_ID" > "$REVOCATION_FILE"
+    gpg --gen-revoke "$GPG_KEY_ID" > "$REVOCATION_FILE_PATH"
 }
 
 # Função para enviar ao Bitwarden
@@ -66,10 +66,56 @@ upload_to_bitwarden() {
     BW_SESSION=$(bw unlock --raw)
     export BW_SESSION
 
-    for file in "$PRIVATE_KEY_FILE" "$PUBLIC_KEY_FILE" "$REVOCATION_FILE"; do
+    for file in "$PRIVATE_KEY_PATH" "$PUBLIC_KEY_PATH" "$REVOCATION_FILE_PATH"; do
         echo "☁️ Enviando $file para o Bitwarden..."
-        bw create attachment --file "$file" --itemid "$BW_SECRET_ID" --session "$BW_SESSION"
+        replace_file "$file"
     done
+}
+
+replace_file() {
+  local file="$1"
+
+  if [ ! -f "$file" ]; then
+    echo "Arquivo não encontrado: $file"
+    return 1
+  fi
+
+  local filename
+  filename=$(basename "$file")
+
+  # 1. Criar novo attachment
+  if ! bw create attachment \
+    --file "$file" \
+    --itemid "$BW_SECRET_ID" \
+    --session "$BW_SESSION" >/dev/null 2>&1; then
+    echo "Erro ao criar attachment"
+    return 1
+  fi
+
+  # 2. Buscar o attachment recém-criado
+  local new_id
+  new_id=$(bw get item "$BW_SECRET_ID" --session "$BW_SESSION" \
+    | jq -r ".attachments[] | select(.fileName == \"$filename\") | .id" \
+    | tail -n1)
+
+  if [ -z "$new_id" ]; then
+    echo "Falha ao localizar attachment recém-criado"
+    return 1
+  fi
+
+  # 3. Buscar attachments antigos (mesmo nome, exceto o novo)
+  local old_ids
+  old_ids=$(bw get item "$BW_SECRET_ID" --session "$BW_SESSION" \
+    | jq -r ".attachments[] | select(.fileName == \"$filename\" and .id != \"$new_id\") | .id")
+
+  # 4. Deletar antigos
+  for id in $old_ids; do
+    bw delete attachment "$id" \
+      --itemid "$BW_SECRET_ID" \
+      --session "$BW_SESSION" >/dev/null 2>&1
+  done
+
+  echo "Arquivo '$filename' substituído com sucesso"
 }
 
 # Função de limpeza (será sempre chamada pelo trap)
@@ -78,7 +124,7 @@ cleanup() {
     local removidos=()
     local erro_arquivos=()
 
-    for file in "$PRIVATE_KEY_FILE" "$PUBLIC_KEY_FILE" "$REVOCATION_FILE"; do
+    for file in "$PRIVATE_KEY_PATH" "$PUBLIC_KEY_PATH" "$REVOCATION_FILE_PATH"; do
         if [[ -f "$file" ]]; then
             if shred -u "$file"; then
                 removidos+=("$file")

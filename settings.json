@@ -84,5 +84,7 @@
   "editor.minimap.showSlider": "always",
   "git.confirmSync": false,
   "chat.viewSessions.orientation": "stacked",
-  "workbench.editor.empty.hint": "hidden"
+  "workbench.editor.empty.hint": "hidden",
+  "gitlens.ai.model": "vscode",
+  "gitlens.ai.vscode.model": "copilot:gpt-4.1"
 }
