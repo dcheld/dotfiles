@@ -86,5 +86,11 @@
   "chat.viewSessions.orientation": "stacked",
   "workbench.editor.empty.hint": "hidden",
   "gitlens.ai.model": "vscode",
-  "gitlens.ai.vscode.model": "copilot:gpt-4.1"
+  "gitlens.ai.vscode.model": "copilot:gpt-4.1",
+"containers.networks.label": "NetworkDriver",
+"terminal.integrated.mouseWheelScrollSensitivity": 3,
+"terminal.integrated.gpuAcceleration": "off",
+"claudeCode.preferredLocation": "panel",
+"window.autoDetectColorScheme": true,
+"workbench.preferredDarkColorTheme": "Tokyo Night"
 }
